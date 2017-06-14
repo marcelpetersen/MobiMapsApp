@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle start>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Home</ion-title>
+    <button ion-button menuToggle end>
+      <ion-icon name="information-circle"></ion-icon>
+    </button>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-card (click)="goToMap('Vancouver')">
+    <img src="assets/img/vancouver.png" />
+    <ion-card-content >
+      <!--<ion-card-title text-center>
+        Vancouver
+      </ion-card-title>
+      <p>
+        The most popular industrial group ever, and largely responsible for bringing the music to a mass audience.
+      </p>-->
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>

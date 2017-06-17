@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import 'leaflet';
 import { NavController, NavParams } from 'ionic-angular';
-import { MapService } from "../../providers/index";
+import { MapService, DataService } from "../../providers/index";
+import { City } from "../../model/city";
 /**
  * Generated class for the Map page.
  *
@@ -13,24 +14,27 @@ import { MapService } from "../../providers/index";
   selector: 'page-map',
   templateUrl: 'map.html',
 })
-export class MapPage {
-  private cityName: string;
+export class MapPage implements OnInit {
+  public selectedCity: City;
+  private errorMessage: any;
 
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, private map: MapService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private map: MapService, private api: DataService) {
+    
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad Map');
-         this.cityName = this.navParams.get('city');
-         if(this.cityName) {
-            this.map.initializeMap(this.cityName);
-         }else {
-           //throw error
-         }
-         
-			
+   ngOnInit(): void {
+        this.selectedCity = this.navParams.data;
+          this.api.getByCity(this.selectedCity.name).subscribe((mapNodeLists) => {
+           
+          this.map.initializeMap(mapNodeLists, this.selectedCity.city_map_leaflet);
+        },
+            error => this.errorMessage = <any>error
+        );
   }
 
+  public goToCurrentPositioin() {
+    this.map.goToCurrentPostion();
+  }
 
-}
+  }
+

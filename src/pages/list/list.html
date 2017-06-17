@@ -1,23 +1,24 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>List</ion-title>
-  </ion-navbar>
+  <mobi-nav></mobi-nav>
 </ion-header>
 
 <ion-content>
+<ion-searchbar>
+</ion-searchbar>
   <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon [name]="item.icon" item-left></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-right>
-        {{item.note}}
-      </div>
-    </button>
+    <ion-item  *ngFor="let item of listOfMapNode" >
+      <ion-row>
+        <ion-col col-4>
+          <img style="width:100px;height:80px;max-width:100%;max-height:100%" src="{{item.logo.url}}" >
+        </ion-col>
+        <ion-col style="white-space:normal">
+          <h2>{{item.business_name}}</h2>
+          <p>{{item.business_category}}</p>
+         
+        </ion-col>
+      </ion-row>
+    </ion-item>
   </ion-list>
-  <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div>
+ 
 </ion-content>
+

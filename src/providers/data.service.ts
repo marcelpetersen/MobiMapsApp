@@ -5,13 +5,19 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 //model
-import { MapNode } from '../model/index'
+import { MapNode, City } from '../model/index'
 
 @Injectable()
 export class DataService {
-    private apiUrlBase = 'http://www.mobimaps.ca/api/merchants';
+    private apiUrlBase = 'http://www.mobimaps.ca/api';
 
     constructor(private http: Http) {
+    }
+
+    public getCityWithMaps() : Observable<City[]> {
+        return this.http.get(this.apiUrlBase + '/cities')
+                        .map(this.extractData)
+                        .catch(this.handleError);
     }
 
     public getApi(): Observable<MapNode[]> {
@@ -22,16 +28,16 @@ export class DataService {
 
     public getByCity(cityName) : Observable<MapNode[]> { 
         //http://www.mobimaps.ca/api/merchants/get_by_city?city=Vancouver
-        return this.http.get(this.apiUrlBase + '/get_by_city?city='+ cityName)
+        return this.http.get(this.apiUrlBase + '/merchants/get_by_city?city='+ cityName)
                         .map(this.extractData)
                         .catch(this.handleError);
     } 
 
-
+     
     private extractData(res: Response) {
-    let body = res.json();
-    return body || { };
-  }
+        let body = res.json();
+        return body || { };
+    }
 
     private handleError(error: Response | any) {
 

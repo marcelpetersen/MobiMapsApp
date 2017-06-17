@@ -1,29 +1,12 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle start>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Home</ion-title>
-    <button ion-button menuToggle end>
-      <ion-icon name="information-circle"></ion-icon>
-    </button>
-  </ion-navbar>
-
+  <mobi-nav></mobi-nav>
 </ion-header>
-
-<ion-content padding>
-
-  <ion-card (click)="goToMap('Vancouver')">
-    <img src="assets/img/vancouver.png" />
-    <ion-card-content >
-      <!--<ion-card-title text-center>
-        Vancouver
-      </ion-card-title>
-      <p>
-        The most popular industrial group ever, and largely responsible for bringing the music to a mass audience.
-      </p>-->
+<ion-content>
+  <ion-card (click)="goToMap(city)" *ngFor="let city of cityList" class="city-card" [style.backgroundImage]="'url(' + city.city_image.phone.url + ')'" style="margin:0 !important;width:100%;height:250px;">
+    <ion-card-content class="mobi-card" bottom text-center text-uppercase>
+     {{city.name}}
     </ion-card-content>
   </ion-card>
-
+ 
 
 </ion-content>

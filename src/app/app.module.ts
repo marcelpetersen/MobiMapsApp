@@ -5,11 +5,13 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage, MapPage } from '../pages/index';
+import { TabsComponent, NavComponent } from "../common/index";
 import { ListPage } from '../pages/list/list';
 import { L_TOKEN , DataService, MapService } from "../providers/index";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Geolocation } from '@ionic-native/geolocation';
 
 declare let L : Object;
 
@@ -18,23 +20,28 @@ declare let L : Object;
     MyApp,
     HomePage,
     MapPage,
-    ListPage
+    ListPage,
+    TabsComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp,{tabsPlacement: 'top'}),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
     MapPage,
-    ListPage
+    ListPage,
+    TabsComponent,
+    NavComponent
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    Geolocation,
     { 
       provide: L_TOKEN, 
       useValue: L 

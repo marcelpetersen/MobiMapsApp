@@ -2,6 +2,9 @@ import { Injectable, Inject } from '@angular/core';
 import { DataService } from "./data.service";
 import { L_TOKEN } from "./leaflet.service";
 
+import { Geolocation } from '@ionic-native/geolocation';
+
+
 
 //model
 import { MapNode, ICONS } from "../model/index";
@@ -14,6 +17,9 @@ export class MapService {
     public errorMessage: string;
     public marker: any;
 
+
+	//current postioin
+	private crd: any;
 
 	private accommodations: any;
 	private agriculture_fishing_and_hunting: any;
@@ -36,42 +42,64 @@ export class MapService {
 	private transportation_and_warehousing: any;
 
 	private markerTemplate: string;
+	
 
-    constructor(@Inject(L_TOKEN) private L: any, private api: DataService) {}
+    constructor(@Inject(L_TOKEN) private L: any, private api: DataService, private geolocation: Geolocation) {}
 
-    public initializeMap(cityName) {
+    public initializeMap(mapNodeList ,leafletMapUrl: string) {
+		leafletMapUrl = leafletMapUrl || 'http://res.cloudinary.com/manoylo/image/upload/maps/vancouver/{z}/{x}/{y}.png';
         var mapSW = [0, 4096],
             mapNE = [4096, 0];
+		var	maxZoom =4,
+			minZoom = 2;
 
-        // declare map object
-        this.map = this.L.map('map').setView([0, 0], 2);
+		//Belgrade testing
+		if(leafletMapUrl === 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png') {
+			 //maxZoom = 18;
+			// minZoom = 10;
+			this.map = this.L.map('map').setView([44.802575, 20.465540], 12);
 
-        // reference the tiles
-        this.L.tileLayer('http://res.cloudinary.com/manoylo/image/upload/maps/vancouver/{z}/{x}/{y}.png', {
-            minZoom: 2,
-            maxZoom: 4,
-            continuousWorld: false,
-            noWrap: true,
-            crs: this.L.CRS.Simple
-        }).addTo(this.map);
+			L.tileLayer(leafletMapUrl, {
+				attribution: 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+				maxZoom: 18,
+			}).addTo(this.map);
 
-        this.map.setMaxBounds(new this.L.LatLngBounds(
-            this.map.unproject(mapSW, this.map.getMaxZoom()),
-            this.map.unproject(mapNE, this.map.getMaxZoom())
-        ));
+		} else {
+			// declare map object
+			this.map = this.L.map('map').setView([0, 0], 1);
+		
+				// reference the tiles
+			this.L.tileLayer(leafletMapUrl, {
+				minZoom: minZoom,
+				maxZoom: maxZoom,
+				continuousWorld: false,
+				noWrap: true,
+				crs: this.L.CRS.Simple
+			}).addTo(this.map);
 
+			this.map.setMaxBounds(new this.L.LatLngBounds(
+				this.map.unproject(mapSW, this.map.getMaxZoom()),
+				this.map.unproject(mapNE, this.map.getMaxZoom())
+        	));
 
+			
 
-        this.api.getByCity(cityName).subscribe((node) => {
-            this.nodeForMapList = node;
-            console.log(node);
+	    }
+        
 
-            this.addDataToMap(this.map, this.nodeForMapList);
-        },
-            error => this.errorMessage = <any>error
-        );
+		this.nodeForMapList = mapNodeList;
+
+		this.addDataToMap(this.map, this.nodeForMapList);
+       
 
     }
+
+	public goToCurrentPostion() {
+		if(this.crd) {
+			this.map.flyTo([this.crd.latitude,this.crd.longitude]);
+		}
+		
+	}
 
     private addDataToMap(map, serviceData: MapNode[]) {
               // defining map layer groups
@@ -103,6 +131,19 @@ export class MapService {
 			this.markerFactoryMethod(element,map);
 			
         }); //endforeach
+
+		//fetch current postioin and show it
+			this.geolocation.getCurrentPosition().then((resp) => {
+				// resp.coords.latitude
+				// resp.coords.longitude
+				this.crd = resp.coords;
+				L.marker([resp.coords.latitude,resp.coords.longitude]).addTo(this.map);
+				
+			}).catch((error) => {
+				console.log('Error getting location', error);
+			});
+		
+
     
     } // addDataToMap
 
@@ -126,7 +167,7 @@ export class MapService {
 				<div id="apnd">
 					
 				</div>
-				<p><strong>Category:</strong> <br>`+element.business_name+`</p>`;
+				<p><strong>Category:</strong> <br>`+element.business_category+`</p>`;
 				
 
 			if(icon != null && layer !=null) {
@@ -147,41 +188,41 @@ export class MapService {
 	private getIcon(category: string) {
 		switch (category) {
 			case 'Accommodations':
-				return ICONS.accommodation_icon
+				return this.L.icon(ICONS.accommodation_icon)
 			case 'Adventure Tours':
-				return ICONS.adventure_tours_icon
+				return this.L.icon(ICONS.adventure_tours_icon)
 			case 'Arts, entertainment and recreation':
-				return ICONS.arts_and_entertainment_icon
+				return this.L.icon(ICONS.arts_and_entertainment_icon)
 			case 'Agriculture, forestry, fishing and hunting':
-				return ICONS.agriculture_fishing_and_hunting_icon
+				return this.L.icon(ICONS.agriculture_fishing_and_hunting_icon)
 			case 'Attractions':
-				return ICONS.attractions_icon
+				return this.L.icon(ICONS.attractions_icon)
 			case 'Dining':
-				return ICONS.dining_icon
+				return this.L.icon(ICONS.dining_icon)
 			case 'Currency Exchange':
 				return null
 			case 'Fitness Clubs':
-				return ICONS.fitness_clubs_icon
+				return this.L.icon(ICONS.fitness_clubs_icon)
 			case 'Medical & Dental':
-				return ICONS.medical_and_dental_icon
+				return this.L.icon(ICONS.medical_and_dental_icon)
 			case 'Night Life':
-				return ICONS.nightlife_icon
+				return this.L.icon(ICONS.nightlife_icon)
 			case 'Rentals':
-				return ICONS.rentals_icon
+				return this.L.icon(ICONS.rentals_icon)
 			case 'Shopping':
-				return ICONS.shopping_icon
+				return this.L.icon(ICONS.shopping_icon)
 			case 'Sightseeing':
-				return ICONS.sightseeing_icon
+				return this.L.icon(ICONS.sightseeing_icon)
 			case 'Spas':
-				return ICONS.spas_icon
+				return this.L.icon(ICONS.spas_icon)
 			case 'Sporting Goods':
-				return ICONS.sporting_goods_icon
+				return this.L.icon(ICONS.sporting_goods_icon)
 			case 'Tattoos':
-				return ICONS.tattoos_icon
+				return this.L.icon(ICONS.tattoos_icon)
 			case 'Tours & Travel':
-				return ICONS.tours_and_travel_icon
+				return this.L.icon(ICONS.tours_and_travel_icon)
 			case 'Transportation and warehousing':
-				return ICONS.transportation_and_warehousing_icon
+				return this.L.icon(ICONS.transportation_and_warehousing_icon)
 			default:
 			    return null;
 		}

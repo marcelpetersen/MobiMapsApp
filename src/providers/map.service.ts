@@ -96,6 +96,15 @@ export class MapService {
 		
 	}
 
+	public goToPosition(latitude: number, longitude: number) {
+		//this.map.flyTo([latitude, longitude]);
+		//this.map.setView([latitude,longitude], 0);
+		this.map.panTo(new L.LatLng(
+			this.map.unproject(+latitude, this.map.getMaxZoom()),
+			this.map.unproject(+longitude, this.map.getMaxZoom())
+			));
+	}
+
 	public getNodesForCurrentMap() {
 
 		//calculate distance if current positon exist
@@ -193,6 +202,8 @@ export class MapService {
 					}).bindPopup(
 						this.markerTemplate).addTo(layer);
 			}	
+
+
 							
 	}
 

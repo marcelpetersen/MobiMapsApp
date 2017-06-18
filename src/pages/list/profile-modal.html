@@ -1,7 +1,7 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar  color="primary">
     <ion-title>
-      Profile
+      {{bussiness.business_name}}
     </ion-title>
     <ion-buttons start>
       <button ion-button (click)="dismiss()">
@@ -13,14 +13,48 @@
 </ion-header>
 <ion-content>
   <ion-card>
-  <img [src]="bussiness.logo.url"/>
-  <ion-card-content>
+  <img [src]="cityUrl"/> 
+  <ion-card-content text-center>
     <ion-card-title>
       {{bussiness.business_name}}
       </ion-card-title>
     <p>
-      {{bussiness.distanceFromCurrentPosition}} km
+      <img style="width:150px;height:150px;margin:0 auto;" [src]="bussiness.logo.url"/> 
     </p>
+    <p>
+      Distance from you:
+    </p>
+    <p>
+      {{bussiness.distanceFromCurrentPosition}} mi
+    </p>
+    <p>
+      <button color="primary" (click)="goToMap()" clear full ion-button  icon-left>
+        <ion-icon name="pin"></ion-icon>
+          On the Map
+      </button>
+    </p>
+    <ion-row>
+      <ion-col col-4>
+        <button style="background-color:#ef5572" full ion-button>Website</button>
+      </ion-col>
+      <ion-col col-4>
+        <button style="background-color:#337ab7" full ion-button color="secondary">Facebook</button>
+      </ion-col>
+      <ion-col col-4>
+        <button style="background-color:#04a3cc" full ion-button >Twitter</button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-4>
+        <button style="background-color:#95dbed" full ion-button>Cal</button>
+      </ion-col>
+      <ion-col col-4>
+        <button style="background-color:#f4a442" full ion-button color="secondary">Email</button>
+      </ion-col>
+      <ion-col col-4>
+        <button full ion-button color="danger">Route</button>
+      </ion-col>
+    </ion-row>
   </ion-card-content>
 </ion-card>
  

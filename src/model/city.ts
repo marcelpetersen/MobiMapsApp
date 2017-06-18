@@ -8,5 +8,7 @@ export class City {
             }
         };
     public city_map_leaflet: string;
+
 }
+
 

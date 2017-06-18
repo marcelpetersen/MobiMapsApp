@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { ListPage, MapPage } from "../../pages/index";
 import { DataService, MapService } from "../../providers/index";
-import { MapNode, City } from "../../model/index";
+import { City } from "../../model/index";
 
 @Component({
     template: `

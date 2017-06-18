@@ -14,6 +14,8 @@ import { ProfileModalComponent } from "./profile-modal";
 })
 export class ListPage implements OnInit {
   listOfMapNode: MapNode[];
+  foundNodes: MapNode[];
+  searchTerm: string = '';
   private selectedCity: City;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController,
@@ -25,9 +27,16 @@ export class ListPage implements OnInit {
 
   ngOnInit(): void {
     this.selectedCity = this.navParams.data;
-
-    this.listOfMapNode = this.mapApi.getNodesForCurrentMap();
+    this.searchTerm = '';
+    this.foundNodes = this.listOfMapNode = this.mapApi.getNodesForCurrentMap();
     
+  }
+
+  //HOOKS
+  ionViewWillEnter() {
+
+    this.searchTerm = '';
+    this.setFilteredItems();
   }
 
   itemTapped(event, item) {
@@ -36,6 +45,17 @@ export class ListPage implements OnInit {
       item: item
     });
   }
+
+
+  setFilteredItems() {
+      if(this.searchTerm === '') {
+        this.foundNodes = this.listOfMapNode.slice(0);
+      }
+       this.foundNodes = this.listOfMapNode.filter((item : MapNode) => {
+            return item.business_name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
+        }); 
+ 
+    }
 
   presentModal(selectedNode: MapNode) {
     var dataForModal = {

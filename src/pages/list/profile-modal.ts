@@ -17,9 +17,11 @@ export class ProfileModalComponent implements OnInit {
     }
 
     goToMap() {
-        this.viewCtrl.dismiss({
-            latitude: this.bussiness.y_coordinate,
-            longitude: this.bussiness.x_coordinate });
+        // this.viewCtrl.dismiss({
+        //     latitude: this.bussiness.y_coordinate,
+        //     longitude: this.bussiness.x_coordinate });
+        
+        this.viewCtrl.dismiss();
     }
 
     dismiss() {

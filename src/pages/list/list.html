@@ -3,10 +3,10 @@
 </ion-header>
 
 <ion-content>
-<ion-searchbar>
+<ion-searchbar id="search" [(ngModel)]="searchTerm" (ionInput)="setFilteredItems()" name="searchTerm" type="text">
 </ion-searchbar>
   <ion-list>
-    <ion-item  *ngFor="let item of listOfMapNode" >
+    <ion-item  *ngFor="let item of foundNodes" >
       <ion-row (click)="presentModal(item)">
         <ion-col col-4>
           <img style="width:100px;height:80px;max-width:100%;max-height:100%" src="{{item.logo.url}}" >

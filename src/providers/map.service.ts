@@ -19,7 +19,7 @@ export class MapService {
 
 
 	//current postioin
-	private crd: any;
+	private currentPostion: any;
 
 	private accommodations: any;
 	private agriculture_fishing_and_hunting: any;
@@ -46,7 +46,7 @@ export class MapService {
 
     constructor(@Inject(L_TOKEN) private L: any, private api: DataService, private geolocation: Geolocation) {}
 
-    public initializeMap(mapNodeList ,leafletMapUrl: string) {
+    public initializeMap(mapNodeList , leafletMapUrl: string) {
 		leafletMapUrl = leafletMapUrl || 'http://res.cloudinary.com/manoylo/image/upload/maps/vancouver/{z}/{x}/{y}.png';
         var mapSW = [0, 4096],
             mapNE = [4096, 0];
@@ -82,23 +82,38 @@ export class MapService {
 				this.map.unproject(mapNE, this.map.getMaxZoom())
         	));
 
-			
-
 	    }
         
-
 		this.nodeForMapList = mapNodeList;
 
 		this.addDataToMap(this.map, this.nodeForMapList);
-       
-
     }
 
 	public goToCurrentPostion() {
-		if(this.crd) {
-			this.map.flyTo([this.crd.latitude,this.crd.longitude]);
+		if(this.currentPostion) {
+			this.map.flyTo([this.currentPostion.latitude,this.currentPostion.longitude]);
 		}
 		
+	}
+
+	public getNodesForCurrentMap() {
+
+		//calculate distance if current positon exist
+		if(this.currentPostion) {
+			this.nodeForMapList.forEach((node : MapNode) => {
+				//if node have lat and lng
+				if(node.latitude && node.longitude) {
+					var latlng = L.latLng(node.latitude, node.longitude);
+						var distance = latlng.distanceTo([this.currentPostion.latitude, this.currentPostion.longitude]);
+						node.distanceFromCurrentPosition = distance < 1000 ? Math.round((distance * 0.621371) * 100) / 100 : Math.round((distance * 0.621371) / 1000 * 100) / 100;
+					}
+			});
+		}
+		return this.nodeForMapList;
+	}
+
+	public getCurrentPostion() {
+		return this.currentPostion;
 	}
 
     private addDataToMap(map, serviceData: MapNode[]) {
@@ -136,8 +151,8 @@ export class MapService {
 			this.geolocation.getCurrentPosition().then((resp) => {
 				// resp.coords.latitude
 				// resp.coords.longitude
-				this.crd = resp.coords;
-				L.marker([resp.coords.latitude,resp.coords.longitude]).addTo(this.map);
+				this.currentPostion = resp.coords;
+				//L.marker([resp.coords.latitude,resp.coords.longitude]).addTo(this.map);
 				
 			}).catch((error) => {
 				console.log('Error getting location', error);
@@ -177,10 +192,7 @@ export class MapService {
 						icon: icon
 					}).bindPopup(
 						this.markerTemplate).addTo(layer);
-			}
-
-		    
-			
+			}	
 							
 	}
 

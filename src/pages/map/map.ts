@@ -24,7 +24,7 @@ export class MapPage implements OnInit {
 
    ngOnInit(): void {
         this.selectedCity = this.navParams.data;
-          this.api.getByCity(this.selectedCity.name).subscribe((mapNodeLists) => {
+          this.api.getByCity(this.selectedCity.id).subscribe((mapNodeLists) => {
            
           this.map.initializeMap(mapNodeLists, this.selectedCity.city_map_leaflet);
         },

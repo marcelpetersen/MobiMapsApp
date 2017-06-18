@@ -4,9 +4,8 @@ import { HttpModule } from '@angular/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
-import { HomePage, MapPage } from '../pages/index';
+import { HomePage, MapPage,ListPage, ProfileModalComponent } from '../pages/index';
 import { TabsComponent, NavComponent } from "../common/index";
-import { ListPage } from '../pages/list/list';
 import { L_TOKEN , DataService, MapService } from "../providers/index";
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -21,6 +20,7 @@ declare let L : Object;
     HomePage,
     MapPage,
     ListPage,
+    ProfileModalComponent,
     TabsComponent,
     NavComponent
   ],
@@ -35,6 +35,7 @@ declare let L : Object;
     HomePage,
     MapPage,
     ListPage,
+    ProfileModalComponent,
     TabsComponent,
     NavComponent
   ],

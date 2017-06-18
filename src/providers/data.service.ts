@@ -26,9 +26,9 @@ export class DataService {
                         .catch(this.handleError);
     }
 
-    public getByCity(cityName) : Observable<MapNode[]> { 
+    public getByCity(id: number) : Observable<MapNode[]> { 
         //http://www.mobimaps.ca/api/merchants/get_by_city?city=Vancouver
-        return this.http.get(this.apiUrlBase + '/merchants/get_by_city?city='+ cityName)
+        return this.http.get(this.apiUrlBase + '/merchants/get_by_city?id='+ id)
                         .map(this.extractData)
                         .catch(this.handleError);
     } 

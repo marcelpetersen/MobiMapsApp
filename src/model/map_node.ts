@@ -29,6 +29,8 @@ export class MapNode {
     public saturday: any;
     public sunday: any;
     public not_on_the_map: boolean;
+
+    public distanceFromCurrentPosition: number;
 }
 
 class Logo {
